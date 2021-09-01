@@ -23,11 +23,11 @@ class PySheller:
                 cmds.append(name)
         return cmds
 
-    def get_path(self, command: str) -> str:
+    def get_file_path(self, command: str) -> str:
         return path.join(self.__directory, f"{command}.sh")
 
     def parse_comments(self, command: str) -> dict:
-        with open(self.get_path(command), "r") as cf:
+        with open(self.get_file_path(command), "r") as cf:
             lines = cf.read().splitlines()
             comments = [
                 line.replace("#", "")
@@ -75,7 +75,7 @@ class PySheller:
                 args.append("")
             else:
                 args.append(passed_arg)
-        call(self.get_path(command) + " " + " ".join(args), shell=True)
+        call(self.get_file_path(command) + " " + " ".join(args), shell=True)
 
     def run(self) -> None:
         self.run_command(self.args.command)
