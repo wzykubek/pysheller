@@ -34,5 +34,5 @@ style = "semver"
 format = "{base}"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.0.0, poetry-dynamic-versioning"]
 build-backend = "poetry.core.masonry.api"
