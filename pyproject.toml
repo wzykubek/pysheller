@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pysheller"
 version = "0.0.0"
-description = "Small library to craete Python application based on shell scripts."
+description = "Small library to create Python application based on shell scripts."
 authors = ["samedamci <samedamci@disroot.org>"]
 license = "ISC"
 homepage = "https://github.com/samedamci/guzzy"
