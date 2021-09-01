@@ -2,6 +2,7 @@ from os import listdir, path
 from argparse import ArgumentParser
 from subprocess import call
 import re
+from collections import OrderedDict
 
 
 class PySheller:
@@ -34,14 +35,18 @@ class PySheller:
                 if line.startswith("#") and not line.startswith("#!")
             ]
 
-            parameters = {"help": None, "args": []}
+            parameters = {"help": None, "args": {}}
+
             for key, val in [line.split(" : ") for line in comments]:
                 key, val = key.strip(), val.strip()
                 if key == "help":
                     parameters["help"] = val
                 elif bool(re.match(r"arg\d+$", key)):
                     name, desc = [x.strip() for x in val.split(" - ")]
-                    parameters["args"].append({"name": name, "help": desc})
+                    id_ = int(key.split("arg")[1])
+                    parameters["args"][id_] = {"name": name, "help": desc}
+
+            parameters["args"] = dict(OrderedDict(sorted(parameters["args"].items())))
 
         return parameters
 
@@ -57,13 +62,20 @@ class PySheller:
             subcommands[cmd] = subparsers.add_parser(cmd, help=p["help"])
 
             if "args" in p:
-                for arg in p["args"]:
-                    subcommands[cmd].add_argument(arg["name"], help=arg["help"])
+                for arg in p["args"].items():
+                    subcommands[cmd].add_argument(arg[1]["name"], help=arg[1]["help"])
         self.args = self.arg_parser.parse_args()
 
     def run_command(self, command: str) -> None:
-        args = [x[1] for x in self.args._get_kwargs() if x[1] is not None]
-        call(self.get_path(args[0]) + " " + " ".join(args[1:]), shell=True)
+        args = []
+        for exp_args in self.parse_comments(command)["args"].items():
+            id_, arg = exp_args
+            passed_arg = self.args.__getattribute__(re.sub(r"^--", "", arg["name"]))
+            if passed_arg is None:
+                args.append("")
+            else:
+                args.append(passed_arg)
+        call(self.get_path(command) + " " + " ".join(args), shell=True)
 
     def run(self) -> None:
         self.run_command(self.args.command)
