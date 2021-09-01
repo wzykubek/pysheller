@@ -6,10 +6,10 @@ from collections import OrderedDict
 
 
 class PySheller:
-    def __init__(self, app_name: str, app_description: str, scripts_dir: str) -> None:
-        self.app = app_name
-        self.desc = app_description
-        self.__directory = path.abspath(scripts_dir)
+    def __init__(self, name: str, description: str, commands_dir: str) -> None:
+        self.app = name
+        self.desc = description
+        self.__directory = path.abspath(commands_dir)
         self.commands = self.get_commands()
         self.parse_args()
         self.run()
