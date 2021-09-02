@@ -4,6 +4,7 @@ version = "0.0.0"
 description = "Small library to create Python application based on shell scripts."
 authors = ["samedamci <samedamci@disroot.org>"]
 license = "ISC"
+readme = "README.md"
 homepage = "https://github.com/samedamci/guzzy"
 repository = "https://github.com/samedamci/guzzy"
 keywords = ["package", "shell", "shell-script"]
